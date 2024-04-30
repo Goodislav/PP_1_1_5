@@ -6,9 +6,12 @@ import jm.task.core.jdbc.util.Util;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserDaoJDBCImpl implements UserDao {
     private Connection connection = Util.getConnection();
+    private static final Logger logger = Logger.getLogger(UserDaoJDBCImpl.class.getName());
 
     public UserDaoJDBCImpl() {
 
@@ -24,8 +27,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.execute();
+            logger.info("Таблица пользователей успешно создана \n");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Ошибка создания таблицы \n", e);
         }
     }
 
@@ -36,7 +40,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Ошибка удаления таблицы \n", e);
         }
     }
 
@@ -50,7 +54,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            String message = String.format("User с именем — %s не добавлен в базу данных \n", name);
+            logger.log(Level.SEVERE, message, e);
         }
     }
 
@@ -63,18 +68,19 @@ public class UserDaoJDBCImpl implements UserDao {
 
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            String message = String.format("Ошибка удаления user-a с id - %d \n", id);
+            logger.log(Level.SEVERE, message, e);
         }
     }
 
 //    Получение всех User(ов) из таблицы
     public List<User> getAllUsers() {
-        List<User> addressList = new ArrayList<>();
+        List<User> users = new ArrayList<>();
 
         String sql = "SELECT * FROM USERS";
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ResultSet resultSet = ps.executeQuery();
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet resultSet = ps.executeQuery()) {
 
             while (resultSet.next()) {
                 User user = new User();
@@ -83,12 +89,12 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setLastName(resultSet.getString("LASTNAME"));
                 user.setAge(resultSet.getByte("AGE"));
 
-                addressList.add(user);
+                users.add(user);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE,"Неудачная попытка получить всех user-ов \n", e);
         }
-        return addressList;
+        return users;
     }
 
 //    Очистка содержания таблицы
@@ -99,7 +105,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Возникла ошибка при попытке очистить таблицу \n", e);
         }
     }
 }

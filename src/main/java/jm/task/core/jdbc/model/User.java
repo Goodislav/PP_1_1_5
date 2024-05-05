@@ -7,15 +7,16 @@ import javax.persistence.Table;
 @Table
 public class User {
     @Id
+    @Column (name = "id")
     private static Long id = 0L;
 
-    @Column
+    @Column (name = "name")
     private static String name;
 
-    @Column
+    @Column (name = "lastname")
     private static String lastName;
 
-    @Column
+    @Column (name = "age")
     private static Byte age;
 
     @Override

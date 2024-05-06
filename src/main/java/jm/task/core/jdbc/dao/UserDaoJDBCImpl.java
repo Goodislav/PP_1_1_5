@@ -44,6 +44,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
+//    Добавление User(а) в таблицу
     public void saveUser(String name, String lastName, byte age) {
         String sql = "INSERT INTO USERS (NAME, LASTNAME, AGE) VALUES (?, ?, ?)";
 
@@ -59,7 +60,7 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-//    Удаление User из таблицы (по id)
+//    Удаление User(а) из таблицы (по id)
     public void removeUserById(long id) {
         String sql = "DELETE FROM USERS WHERE ID = ?";
 

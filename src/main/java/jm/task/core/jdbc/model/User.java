@@ -3,21 +3,21 @@ package jm.task.core.jdbc.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "Users")
 public class User {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    @Column (name = "id")
-    private static Long id = 0L;
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id = 0L;
 
-    @Column (name = "name")
-    private static String name;
+    @Column(name = "name")
+    private String name;
 
-    @Column (name = "lastname")
-    private static String lastName;
+    @Column(name = "lastname")
+    private String lastName;
 
-    @Column (name = "age")
-    private static Byte age;
+    @Column(name = "age")
+    private Byte age;
 
     @Override
     public String toString() {
@@ -39,7 +39,7 @@ public class User {
         this.age = age;
     }
 
-    public static Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -47,7 +47,7 @@ public class User {
         this.id = id;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
@@ -55,7 +55,7 @@ public class User {
         this.name = name;
     }
 
-    public static String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
@@ -63,7 +63,7 @@ public class User {
         this.lastName = lastName;
     }
 
-    public static Byte getAge() {
+    public Byte getAge() {
         return age;
     }
 

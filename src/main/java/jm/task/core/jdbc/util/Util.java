@@ -56,12 +56,10 @@ public class Util {
                 settings.put(Environment.HBM2DDL_AUTO, "");
 
                 configuration.setProperties(settings);
-
                 configuration.addAnnotatedClass(User.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
-
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
                     logger.log(Level.INFO, "Connection with Hibernate is OK");
             } catch (HibernateException e) {
@@ -69,5 +67,8 @@ public class Util {
                 }
             }
         return sessionFactory;
+    }
+    public static void closeSessionFactory() {
+        sessionFactory.close();
     }
 }

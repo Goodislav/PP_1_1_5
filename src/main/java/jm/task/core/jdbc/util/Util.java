@@ -40,37 +40,31 @@ public class Util {
     }
 
     //    Hibernate connection
-    public static class Hibernate {
-        public Hibernate() {
+    public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            try {
+                Configuration configuration = new Configuration();
 
-        }
+                Properties settings = new Properties();
+                settings.put(Environment.DRIVER, DRIVER);
+                settings.put(Environment.URL, URL);
+                settings.put(Environment.USER, USERNAME);
+                settings.put(Environment.PASS, PASSWORD);
+                settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
+                settings.put(Environment.SHOW_SQL, "true");
+                settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 
-        public static SessionFactory getSessionFactory() {
-            if (sessionFactory == null) {
-                try {
-                    Configuration configuration = new Configuration();
+                configuration.setProperties(settings);
+                configuration.addAnnotatedClass(User.class);
 
-                    Properties settings = new Properties();
-                    settings.put(Environment.DRIVER, DRIVER);
-                    settings.put(Environment.URL, URL);
-                    settings.put(Environment.USER, USERNAME);
-                    settings.put(Environment.PASS, PASSWORD);
-                    settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
-                    settings.put(Environment.SHOW_SQL, "true");
-                    settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-
-                    configuration.setProperties(settings);
-                    configuration.addAnnotatedClass(User.class);
-
-                    ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                            .applySettings(configuration.getProperties()).build();
-                    sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-                    logger.log(Level.INFO, "Connection with Hibernate is OK");
-                } catch (HibernateException e) {
-                    logger.log(Level.SEVERE, "Connection with Hibernate has ERROR", e);
-                }
+                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties()).build();
+                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+                logger.log(Level.INFO, "Connection with Hibernate is OK");
+            } catch (HibernateException e) {
+                logger.log(Level.SEVERE, "Connection with Hibernate has ERROR", e);
             }
-            return sessionFactory;
         }
+        return sessionFactory;
     }
 }
